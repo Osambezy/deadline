@@ -51,6 +51,8 @@ function initGameEnv()
 		dark_time: 300,  // ms, between region transitions (doors)
 
 		imgcollection: new ImageCollection([
+		'alberto0.png',
+		'errorbar0.png',
 		'face_alberto.png',
 		'face_greg.png',
 		'face_mira.png',
@@ -123,6 +125,7 @@ function initGameEnv()
 			gameenv.background.src = bg_folder + region + screen + ".png";
 			gameenv.movePlayer(initial_x, "");
 			gameenv.changeBackToOriginalPose();
+			gameenv.clearStatusMessage();
 		},
 		initImgs: function() {
 			gameenv.initFadeLayer();

@@ -49,10 +49,10 @@ var content = {
 			doors: []},
 			// 5 Alberto's house
 			{interactions: [],
-			doors: [{from: 405, to: 658, region: 'alberto', screen: 0, pos: 200}]},
+			doors: [{from: 405, to: 658, region: 'alberto', screen: 0, pos: 135}]},
 			// 6 Error bar
 			{interactions: [],
-			doors: [{from: 430, to: 680, region: 'errorbar', screen: 0, pos: 500}]},
+			doors: [{from: 430, to: 680, region: 'errorbar', screen: 0, pos: 160}]},
 			// 7
 			{interactions: [],
 			doors: []},
@@ -74,12 +74,12 @@ var content = {
 			doors: []}
 		],
 		'alberto': [
-			{interactions: [{from: 500, to: 700, action: function() {dialog('alberto_before');}}],
-			doors: [{from: 0, to: 200, region: 'outside', screen: 5, pos: 520}]}
+			{interactions: [{from: 704, to: 828, action: function() {dialog('alberto_before');}}],
+			doors: [{from: 0, to: 70, region: 'outside', screen: 5, pos: 520}]}
 		],
 		'errorbar': [
-			{interactions: [{from: 500, to: 700, action: function() {dialog('old_greg');}}],
-			doors: [{from: 0, to: 200, region: 'outside', screen: 6, pos: 550}]}
+			{interactions: [{from: 615, to: 710, action: function() {dialog('old_greg');}}],
+			doors: [{from: 0, to: 85, region: 'outside', screen: 6, pos: 550}]}
 		]
 	},
 	dialogs: {
