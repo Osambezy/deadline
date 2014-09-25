@@ -83,9 +83,9 @@ var content = {
 		]
 	},
 	dialogs: {
-		'email': {image: 'greg', text: 'New e-mail from Dr. Brköwsky!', next: 'email_body'},
-		'email_body': {image: 'greg', text: 'Dear Mr. Kolofar,<br><br>It came to my ears that you are about to publish a scientific article, in which you cite one of my publications. Although I am glad to hear about this, it seems to me that you are having some major misconceptions about the main ideas of my work!', next: 'email_body2'},
-		'email_body2': {image: 'greg', text: 'I strongly recommend you to correct these errors in your paper before submitting it! You might find clarification in my book from 1995 about this subject.<br><br>Best regards,<br>Dr. Brköwsky', next: 'email_ren'},
+		'email': {image: 'email', text: 'New e-mail from Dr. Brköwsky!', next: 'email_body'},
+		'email_body': {image: 'email', text: 'Dear Mr. Kolofar,<br><br>It came to my ears that you are about to publish a scientific article, in which you cite one of my publications. Although I am glad to hear about this, it seems to me that you are having some major misconceptions about the main ideas of my work!', next: 'email_body2'},
+		'email_body2': {image: 'email', text: 'I strongly recommend you to correct these errors in your paper before submitting it! You might find clarification in my book from 1995 about this subject.<br><br>Best regards,<br>Dr. Brköwsky', next: 'email_ren'},
 		'email_ren': {image: 'ren', text: "Hmm that's strange! How does this guy know about my draft? Where did he get my e-mail address from? There's something really weird going on. I better go to the library to have a look in that book he mentioned."},
 		
 		'washingmachine': {image: 'ren', text: 'Shit!! The washing machine ran out of money! Now the door is locked and all my clothes are inside. I should get another coin to let it finish.'},
