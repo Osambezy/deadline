@@ -5,7 +5,7 @@ var audio;
 
 function MusicSound(name) {
 	this.sound = new Howl({
-		urls: [music_folder + name + ".mp3"], //, "music/" + name + ".ogg"],
+		urls: [music_folder + name + ".mp3", music_folder + name + ".ogg"],
 		buffer: true,
 		loop: true
 	});
