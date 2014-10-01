@@ -38,13 +38,21 @@ function display_message(face, text, next) {
 	document.getElementById("faceimg").src = image_dir + "face_" + face + ".png";
 	document.getElementById("textbox").innerHTML = text;
 	var delay = text.length * delay_factor + delay_constant;
+	var next_func;
 	if (next == -1) {  // keep open forever to wait for user input
 		return;
 	} else if (next) { // continue with next dialog
-		setTimeout(function() {start_dialog(next);}, delay);
+		next_func = function() { start_dialog(next); };
 	} else { // nothing to continue, close window
-		setTimeout(close, delay);
+		next_func = close;
 	}
+	var to = setTimeout(next_func, delay);
+	document.onmousedown = function() {
+		// click handler to skip to next dialog
+		clearTimeout(to);
+		document.onmousedown = null;
+		next_func();
+	};
 }
 
 function display_choice(face, choices) {
