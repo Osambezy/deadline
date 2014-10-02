@@ -21,6 +21,7 @@ function bodyLoaded()
 }
 
 function start_dialog(id) {
+	document.onmousedown = null;
 	var d = content.dialogs;
 	if (d[id]) {
 		if (d[id].choice) {
@@ -50,7 +51,6 @@ function display_message(face, text, next) {
 	document.onmousedown = function() {
 		// click handler to skip to next dialog
 		clearTimeout(to);
-		document.onmousedown = null;
 		next_func();
 	};
 }
