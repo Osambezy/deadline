@@ -13,7 +13,8 @@ function MusicSound(name) {
 
 function EffectSound(name) {
 	this.sound = new Howl({
-		urls: [sound_folder + name + ".wav", sound_folder + name + ".mp3"],
+		urls: [sound_folder + name + ".mp3", sound_folder + name + ".wav"],
+		volume: 0.3,
 		buffer: false
 	});
 }
@@ -29,20 +30,16 @@ function initAudio()
 		},
 		playMusic: function(name) {
 			audio.music[name].sound.play()
-		},
-		playStepSound: function() {
-			audio.playSound("step" + audio.step_index);
-			if (audio.step_index == 1) {
-				audio.step_index = 2;
-			} else {
-				audio.step_index = 1;
-			}
 		}
 	};
 	var effectlist = [
-		"step1",
-		"step2",
-		"dialog"];
+		"dialog",
+		"steps_floor",
+		"steps_house",
+		"steps_outside",
+		"steps_park",
+		"steps_wood",
+		"steps_wood2"];
 	var musiclist = [
 		"music01"];
 	for (var i=0; i<effectlist.length; i++) {

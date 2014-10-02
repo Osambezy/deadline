@@ -42,7 +42,7 @@ function bodyLoaded()
 function initGameEnv()
 {
 	gameenv = {
-		walkingTimerInterval: 200,
+		walkingTimerInterval: 240,
 		default_transition_width: 100,
 		default_entrance_pos: 80,
 		default_player_y: 160,
@@ -97,7 +97,7 @@ function initGameEnv()
 		playerPoses: [1, 3, 2, 3],
 		//playerMovementsForPoses: [10, 20, 10, 20],
 		//distanceTolerance: 20,
-		playerMovementsForPoses: [15, 30, 15, 30],
+		playerMovementsForPoses: [20, 34, 20, 34],
 		distanceTolerance: 30,
 		
 		iframe: document.getElementById("popup_frame"),
@@ -209,7 +209,7 @@ function initGameEnv()
 			gameenv.changePlayerPose();
 			gameenv.movePlayer(gameenv.playerPosition + movement, ic.images["guyright" + gameenv.playerPoses[gameenv.playerPose] + ".png"].src);
 			if (gameenv.playerPose == 0 || gameenv.playerPose == gameenv.playerPoses.length / 2)
-				audio.playStepSound();
+				audio.playSound("steps_" + content.screens[gameenv.region][gameenv.screen].steps);
 		},
 		stepLeft: function() {
 			var ic = gameenv.imgcollection;
@@ -218,7 +218,7 @@ function initGameEnv()
 			gameenv.changePlayerPose();
 			gameenv.movePlayer(gameenv.playerPosition - movement, ic.images["guyleft" + gameenv.playerPoses[gameenv.playerPose] + ".png"].src);
 			if (gameenv.playerPose == 0 || gameenv.playerPose == gameenv.playerPoses.length / 2)
-				audio.playStepSound();
+				audio.playSound("steps_" + content.screens[gameenv.region][gameenv.screen].steps);
 		},
 		changeBackToOriginalPose: function() {
 			var ic = gameenv.imgcollection;

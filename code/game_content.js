@@ -14,72 +14,91 @@ var content = {
 				// disable this interaction after clicking once
 				content.screens['room'][0].interactions[0] = {from: -999, to: -999};
 				}}],
-			doors: []},
+			doors: [],
+			steps: 'house'},
 			// 1 kitchen
 			{interactions: [],
-			doors: []},
+			doors: [],
+			steps: 'house'},
 			// 2 hallway upstairs
 			{interactions: [],
-			doors: [{from: 363, to: 633, region: 'house', screen: 1, pos: 360}]}
+			doors: [{from: 363, to: 633, region: 'house', screen: 1, pos: 360}],
+			steps: 'house'}
 		],
 		'house': [
 			// 0 laundry room
 			{interactions: [{from: 98, to: 308, action: function() {dialog('washingmachine');}}],
-			doors: []},
+			doors: [],
+			steps: 'floor'},
 			// 1 hallway downstairs
 			{interactions: [],
 			doors: [{from: 237, to: 480, region: 'room', screen: 2, pos: 500},
-				{from: 880, to: 1000, region: 'outside', screen: 2, pos: 325}]}
+				{from: 880, to: 1000, region: 'outside', screen: 2, pos: 325}],
+			steps: 'floor'}
 		],
 		'outside': [
 			// 0 train station
 			{interactions: [],
-			doors: []},
+			doors: [],
+			steps: 'outside'},
 			// 1
 			{interactions: [],
-			doors: []},
+			doors: [],
+			steps: 'outside'},
 			// 2 entrance to own house
 			{interactions: [],
-			doors: [{from: 200, to: 455, region: 'house', screen: 1, pos: 820}]},
+			doors: [{from: 200, to: 455, region: 'house', screen: 1, pos: 820}],
+			steps: 'outside'},
 			// 3
 			{interactions: [],
-			doors: []},
+			doors: [],
+			steps: 'outside'},
 			// 4 Count Burger
 			{interactions: [{from: 562, to: 832, action: function() {dialog('countburger');}}],
-			doors: []},
+			doors: [],
+			steps: 'outside'},
 			// 5 Alberto's house
 			{interactions: [],
-			doors: [{from: 405, to: 658, region: 'alberto', screen: 0, pos: 135}]},
+			doors: [{from: 405, to: 658, region: 'alberto', screen: 0, pos: 135}],
+			steps: 'outside'},
 			// 6 Error bar
 			{interactions: [],
-			doors: [{from: 430, to: 680, region: 'errorbar', screen: 0, pos: 160}]},
+			doors: [{from: 430, to: 680, region: 'errorbar', screen: 0, pos: 160}],
+			steps: 'outside'},
 			// 7
 			{interactions: [],
-			doors: []},
+			doors: [],
+			steps: 'outside'},
 			// 8 library
 			{interactions: [],
-			doors: []},
+			doors: [],
+			steps: 'outside'},
 			// 9
 			{interactions: [],
-			doors: []},
+			doors: [],
+			steps: 'park'},
 			// 10 Tuner
 			{interactions: [{from: 158, to: 278, action: function() {
 				dialog('tuner');
 				//Internet connection at home dies here:
 				content.screens['room'][0].interactions[0] = {from: 590, to: 800, action: function() {dialog('internet_dead');}};
 			}}],
-			doors: []},
+			doors: [],
+			steps: 'park'},
 			// 11 Mira
 			{interactions: [{from: 869, to: 935, action: function() {dialog('mira');}}],
-			doors: []}
+			doors: [],
+			steps: 'park'}
 		],
 		'alberto': [
 			{interactions: [{from: 704, to: 828, action: function() {dialog('alberto_before');}}],
-			doors: [{from: 0, to: 70, region: 'outside', screen: 5, pos: 520}]}
+			doors: [{from: 0, to: 70, region: 'outside', screen: 5, pos: 520}],
+			steps: 'wood'}
 		],
 		'errorbar': [
 			{interactions: [{from: 615, to: 710, action: function() {dialog('old_greg');}}],
-			doors: [{from: 0, to: 85, region: 'outside', screen: 6, pos: 550}]}
+			doors: [{from: 0, to: 85, region: 'outside', screen: 6, pos: 550}],
+			steps: 'wood'}
 		]
 	},
 	dialogs: {
@@ -119,7 +138,9 @@ var content = {
 		'tuner_jacket': {image: 'tuner', text: "Ah c'mon R.K., that joke is older than LeChuck's beard, haha.", next:'tuner_jacket2'},
 		'tuner_jacket2': {image: 'ren', text: "Ok ok Tuner. You're the boss on classic adventure games!", next:'tuner_main'},
 		'tuner_end': {image: 'tuner', text: "See ya man. Bring some weed next time!"},
+		
 		'old_greg': {image: 'greg', text: 'What do you want?'},
+		
 		'mira': {image: 'ren', text: 'Hi Mira! Enjoying the sun?', next:'mira1'},
 		'mira1': {image: 'mira', text: "Hi Ren! Yes, it's lovely, isn't it?", next:'mira_main'},
 		'mira_main': {image: 'ren', choice: [{text: "How's your work going?", next:'mira_work'}, {text: "Well, i got some stuff to do. See you later!", next:"mira_end"}]},
@@ -128,6 +149,7 @@ var content = {
 		'mira_work3': {image: 'mira', text: "Oh I don't want to keep you busy then!", next:'mira_work4'},
 		'mira_work4': {image: 'ren', text: "Ah, no problem. I always enjoy talking to you!", next:'mira_main'},
 		'mira_end': {image: 'mira', text: 'Bye Ren!'},
+		
 		'internet_dead': {image: 'ren', text: "What's going on here? The internet connection is dead? Oh shit, maybe I should've paid my internet bill more regularly! How can I finish my paper now? I guess I need to take the train to the Institute!"}
 	}
 };
