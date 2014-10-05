@@ -54,6 +54,7 @@ function initGameEnv()
 		'alberto0.png',
 		'errorbar0.png',
 		'face_alberto.png',
+		'face_email.png',
 		'face_greg.png',
 		'face_mira.png',
 		'face_ren.png',
@@ -66,6 +67,10 @@ function initGameEnv()
 		'guyright3.png',
 		'house0.png',
 		'house1.png',
+		'library0.png',
+		'library1.png',
+		'library2.png',
+		'library3.png',
 		'outside0.png',
 		'outside1.png',
 		'outside10.png',
@@ -320,5 +325,3 @@ function initGameEnv()
 		}
 	};
 }
-
-
