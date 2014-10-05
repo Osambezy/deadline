@@ -71,7 +71,7 @@ var content = {
 			steps: 'outside'},
 			// 8 library
 			{interactions: [],
-			doors: [],
+			doors: [{from: 240, to: 630, region: 'library', screen: 0, pos: 210}],
 			steps: 'outside'},
 			// 9
 			{interactions: [],
@@ -98,6 +98,20 @@ var content = {
 		'errorbar': [
 			{interactions: [{from: 615, to: 710, action: function() {dialog('old_greg');}}],
 			doors: [{from: 0, to: 85, region: 'outside', screen: 6, pos: 550}],
+			steps: 'wood'}
+		],
+		'library': [
+			{interactions: [],
+			doors: [{from: 0, to: 100, region: 'outside', screen: 8, pos: 430}],
+			steps: 'wood'},
+			{interactions: [],
+			doors: [],
+			steps: 'wood'},
+			{interactions: [],
+			doors: [],
+			steps: 'wood'},
+			{interactions: [],
+			doors: [],
 			steps: 'wood'}
 		]
 	},
