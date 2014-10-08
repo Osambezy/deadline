@@ -309,7 +309,9 @@ function initGameEnv()
 			gameenv.fade_layer.style.height = "0px";
 		},
 		setFadeOpacity: function() {
-			var opacity = gameenv.fade_opacity;
+			// transform opacity to an exponential function with shape parameter a
+			var a = 0.01;
+			var opacity = 100 - 100 / (Math.exp(100 * a) - 1) * (Math.exp(a * (100 - gameenv.fade_opacity)) - 1);
 			// code from http://clagnut.com/sandbox/imagefades.php
 			opacity = (opacity == 100) ? 99.999 : opacity; // prevent Firefox flickering
 			gameenv.fade_layer.style.filter = "alpha(opacity:"+opacity+")"; // IE/Win
