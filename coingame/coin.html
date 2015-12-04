@@ -1,0 +1,138 @@
+<html>
+    <head>
+        <script language="JavaScript">
+         <!--
+         var coinenv = {
+             // constants (null means: to be initialized)
+             timerInterval : 50,
+             bounceY : null, // <-- from which y coordinate will the coin bounce?
+             gravity : 2, // <-- at every timer tick, the y-velocity of the coin will increse this much
+             bouncingFactor : 0.8, // <-- when the coin bounces, y-velocity=(-bouncingFactor)*y-velocity
+             coin : null,
+             bar : null,
+             glass : null,
+             imgxvel : null,
+             imgyvel : null,
+             result : "", // <-- when the turn is finished, this becomes "win" or "lose"
+             bounced : false, // <-- the game's rules dictates that the coin must bounce at least once
+
+             // state variables:
+             coinMoving : false,
+             coinVelocityX : 0,
+             coinVelocityY : 0,
+
+             // functions:
+             initialize : function() {
+                 coinenv.coin = document.getElementById("coin");
+                 coinenv.background = document.getElementById("background");
+                 coinenv.glass = document.getElementById("glass");
+                 coinenv.bounceY = coinenv.getXY(coinenv.glass)[1] + 110; //(110: glassHeight-40)
+                 coinenv.imgxvel = document.getElementById("imgxvel");
+                 coinenv.imgyvel = document.getElementById("imgyvel");
+             },
+
+             getXY : function(elm) {
+                 return [parseInt(elm.style.left), parseInt(elm.style.top)];
+             },
+
+             setXY : function(elm, x, y) {
+                 elm.style.left = x + "px";
+                 elm.style.top = y + "px";
+             },
+
+             moveTheCoin : function() {
+                 coinenv.coinMoving = true;
+
+                 var x, y;
+                 [x, y] = coinenv.getXY(coinenv.coin);
+
+                 coinenv.coinVelocityY += coinenv.gravity;
+
+                 x += coinenv.coinVelocityX;
+                 y += coinenv.coinVelocityY;
+
+                 // coin getting out of the visible area, we lose
+                 if (x < 0 || x > 600) { // 600: width of the background image
+                     coinenv.result = "lose";
+                     coinenv.reset();
+                     coinenv.coinMoving = false;
+                     return;
+                 }
+
+                 var glassX, glassY;
+                 [glassX, glassY] = coinenv.getXY(coinenv.glass);
+
+                 // coin bouncing from the left-side of the glass
+                 if (x > (glassX - 20) && x < (glassX + 20) && y > glassY) {
+                     x = glassX - 20;
+                     coinenv.coinVelocityX = -coinenv.coinVelocityX;
+                 }
+
+                 // coin getting into the glass
+                 if ((x > (glassX + 20))
+                         && (x <= (glassX + 80))
+                         && (y >= glassY)
+                         && (coinenv.coinVelocityY > 0)) {
+                             if (coinenv.bounced) {
+                                 coinenv.result = "win";
+                             } else {
+                                 coinenv.result = "lose";
+                             }
+                             coinenv.reset();
+                             coinenv.coinMoving = false;
+                             return;
+                 }
+
+                 // coin bouncing from the table
+                 if (y > coinenv.bounceY) {
+                     coinenv.coinVelocityY = (-coinenv.bouncingFactor) * coinenv.coinVelocityY;
+                     y = coinenv.bounceY;
+                     coinenv.bounced = true;
+                 }
+
+                 coinenv.setXY(coinenv.coin, x, y);
+
+                 setTimeout(coinenv.moveTheCoin, coinenv.timerInterval);
+             },
+
+             reset : function() {
+                 coinenv.bounced = false;
+                 coinenv.setXY(coinenv.coin, 0, 0);
+                 coinenv.coinVelocityX = 0;
+                 coinenv.coinVelocityY = 0;
+             },
+
+             mouseMoveHandler : function(e) {
+                 if (!(coinenv.coinMoving)) {
+                     coinenv.setXY(coinenv.imgxvel, e.clientX - 30, 0);
+                     coinenv.setXY(coinenv.imgyvel, 0, e.clientY - 30);
+                 }
+             },
+
+             mouseDownHandler : function(e) {
+                 if (!(coinenv.coinMoving)) {
+                     var factor = 0.1;
+
+                     coinenv.coinVelocityX = e.clientX * factor;
+                     coinenv.coinVelocityY = e.clientY * factor;
+                     coinenv.moveTheCoin();
+                 }
+             },
+
+         };
+         //-->
+        </script>
+
+    </head>
+
+    <body onload="coinenv.initialize()"
+          onmousemove="coinenv.mouseMoveHandler(event)"
+          onmousedown="coinenv.mouseDownHandler(event)">
+
+        <img id="background" src="background.png" style="position: absolute; left: 0px; top: 0px;" />
+        <img id="glass" src="glass.png" style="position: absolute; left: 400; top: 150px;" />
+        <img id="coin" src="coin.png" style="position: absolute; left: 0px; top: 0px;" />
+        <img id="imgxvel" src="xvelocity.png" width="110" style="position: absolute; left: 100px; top: 0px;" />
+        <img id="imgyvel" src="yvelocity.png" width="70" style="position: absolute; left: 0px; top: 100px;" />
+    </body>
+</html>
