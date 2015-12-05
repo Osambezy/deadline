@@ -43,8 +43,10 @@
              moveTheCoin : function() {
                  coinenv.coinMoving = true;
 
-                 var x, y;
-                 [x, y] = coinenv.getXY(coinenv.coin);
+                 var xy, x, y;
+                 xy = coinenv.getXY(coinenv.coin);
+                 x = xy[0];
+                 y = xy[1];
 
                  coinenv.coinVelocityY += coinenv.gravity;
 
@@ -59,8 +61,10 @@
                      return;
                  }
 
-                 var glassX, glassY;
-                 [glassX, glassY] = coinenv.getXY(coinenv.glass);
+                 var glassXY, glassX, glassY;
+                 glassXY = coinenv.getXY(coinenv.glass);
+                 glassX = glassXY[0];
+                 glassY = glassXY[1];
 
                  // coin bouncing from the left-side of the glass
                  if (x > (glassX - 20) && x < (glassX + 20) && y > glassY) {
