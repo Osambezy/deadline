@@ -28,6 +28,9 @@ function initAudio()
 		playSound: function(name) {
 			audio.effects[name].sound.play()
 		},
+		stopSound: function(name) {
+			audio.effects[name].sound.stop()
+		},
 		playMusic: function(name) {
 			audio.music[name].sound.play()
 		}
@@ -39,7 +42,12 @@ function initAudio()
 		"steps_outside",
 		"steps_park",
 		"steps_wood",
-		"steps_wood2"];
+		"steps_wood2",
+		"coin_fly",
+		"coin_bounce",
+		"coin_bounce_glass",
+		"coin_success",
+		"coin_drop"];
 	var musiclist = [
 		"music01"];
 	for (var i=0; i<effectlist.length; i++) {
