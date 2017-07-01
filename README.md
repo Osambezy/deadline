@@ -18,15 +18,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 We use the following sound files from freesound.org:
 
-"Orch 006 cymbal roll" by Karma-Ron http://freesound.org/people/Karma-Ron/
-"warm gong" by Veiler http://freesound.org/people/Veiler/
-"steps in snow" by dreamoutloud http://freesound.org/people/dreamoutloud/
-"steps on sandy ground 360" by pillonoise http://freesound.org/people/pillonoise/
-"heavy-hitting-foot-steps-on-wood-floor" and "heavy-hitting-foot-steps-on-a-wood-floor" by CosmicEmbers http://freesound.org/people/cosmicembers/
-"paper flip 1" by gynation http://freesound.org/people/gynation/
-"Coin Flip" by bone666138 http://freesound.org/people/bone666138/
-"gun shell 7,62mm drop on wood" by dooggter http://freesound.org/people/dooggter/
-"SHOT GLASS" by Kyle1Katarn http://freesound.org/people/kyle1katarn/
-"Coin Drop" by qubodup http://freesound.org/people/qubodup/
-"coin_impact" by Ediecz http://freesound.org/people/Ediecz/
-"coin twirl 3" by Corsica_S http://freesound.org/people/Corsica_S/
+- "Orch 006 cymbal roll" by Karma-Ron http://freesound.org/people/Karma-Ron/
+- "warm gong" by Veiler http://freesound.org/people/Veiler/
+- "steps in snow" by dreamoutloud http://freesound.org/people/dreamoutloud/
+- "steps on sandy ground 360" by pillonoise http://freesound.org/people/pillonoise/
+- "heavy-hitting-foot-steps-on-wood-floor" and "heavy-hitting-foot-steps-on-a-wood-floor" by CosmicEmbers http://freesound.org/people/cosmicembers/
+- "paper flip 1" by gynation http://freesound.org/people/gynation/
+- "Coin Flip" by bone666138 http://freesound.org/people/bone666138/
+- "gun shell 7,62mm drop on wood" by dooggter http://freesound.org/people/dooggter/
+- "SHOT GLASS" by Kyle1Katarn http://freesound.org/people/kyle1katarn/
+- "Coin Drop" by qubodup http://freesound.org/people/qubodup/
+- "coin_impact" by Ediecz http://freesound.org/people/Ediecz/
+- "coin twirl 3" by Corsica_S http://freesound.org/people/Corsica_S/
