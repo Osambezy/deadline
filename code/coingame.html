@@ -1,0 +1,201 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script language="JavaScript">
+        <!--
+        var gameenv = parent.gameenv;
+        var audio = parent.audio;
+
+        var coinenv = {
+            // constants (null means: to be initialized)
+            timerInterval : 50,
+            bounceY : null, // from which y coordinate will the coin bounce?
+            gravity : 2, // at every timer tick, the y-velocity of the coin will increse this much
+            bouncingFactor : 0.8, // when the coin bounces, y-velocity=(-bouncingFactor)*y-velocity
+            stoppingThreshold : 3, // when the y-velocity is smaller than this, the coin doesn't bounce anymore
+            missedDisplayTime : 5000, // how long to display the comic strip where Greg misses, in ms
+            coin : null,
+            bar : null,
+            glass : null,
+            imgxvel : null,
+            imgyvel : null,
+            bounced : false, // the game's rules dictates that the coin must bounce at least once
+
+            // state variables:
+            coinMoving : false,
+            coinVelocityX : 0,
+            coinVelocityY : 0,
+
+            // functions:
+            initialize : function() {
+                coinenv.coin = document.getElementById("coin");
+                coinenv.background = document.getElementById("background");
+                coinenv.glass = document.getElementById("glass");
+                coinenv.bounceY = coinenv.getXY(coinenv.glass)[1] + 110; //(110: glassHeight-40)
+                coinenv.imgxvel = document.getElementById("imgxvel");
+                coinenv.imgyvel = document.getElementById("imgyvel");
+                coinenv.activateMouseHandlers();
+                gameenv.iframeCallback();
+            },
+
+            activateMouseHandlers: function() {
+                document.body.onmousemove = coinenv.mouseMoveHandler;
+                document.body.onmousedown = coinenv.mouseDownHandler;
+            },
+
+            deactivateMouseHandlers: function() {
+                document.body.onmousemove = null;
+                document.body.onmousedown = null;
+            },
+
+            getXY : function(elm) {
+                return [parseInt(elm.style.left), parseInt(elm.style.top)];
+            },
+
+            setXY : function(elm, x, y) {
+                elm.style.left = x + "px";
+                elm.style.top = y + "px";
+            },
+
+            moveTheCoin : function() {
+                coinenv.coinMoving = true;
+
+                var xy, x, y;
+                xy = coinenv.getXY(coinenv.coin);
+                x = xy[0];
+                y = xy[1];
+
+                coinenv.coinVelocityY += coinenv.gravity;
+
+                x += coinenv.coinVelocityX;
+                y += coinenv.coinVelocityY;
+
+                // coin getting out of the visible area, we lose
+                bgX = coinenv.getXY(coinenv.background)[0];
+                if (x < bgX || x >= bgX + 600) {
+                    audio.stopSound("coin_fly");
+                    audio.playSound("coin_drop");
+                    coinenv.coin.style.visibility = 'hidden';
+                    setTimeout(coinenv.missed, 1000);
+                    return;
+                }
+
+                var glassXY, glassX, glassY;
+                glassXY = coinenv.getXY(coinenv.glass);
+                glassX = glassXY[0];
+                glassY = glassXY[1];
+
+                // coin bouncing from the left-side of the glass
+                if (x > (glassX - 20) && x < (glassX + 20) && y > glassY) {
+                    audio.playSound("coin_bounce_glass");
+                    x = glassX - 20;
+                    coinenv.coinVelocityX = -coinenv.coinVelocityX;
+                }
+
+                // coin getting into the glass
+                if ((x > (glassX + 20))
+                        && (x <= (glassX + 80))
+                        && (y >= glassY)
+                        && (coinenv.coinVelocityY > 0)) {
+                            audio.stopSound("coin_fly");
+                            audio.playSound("coin_success");
+                            coinenv.coin.style.visibility = 'hidden';
+                            if (coinenv.bounced) {
+                                setTimeout(coinenv.end, 1000);
+                            } else {
+                                setTimeout(coinenv.missed, 1000);
+                            }
+                            return;
+                }
+
+                // coin bouncing from the table
+                if (y > coinenv.bounceY) {
+                    if (coinenv.coinVelocityY > coinenv.stoppingThreshold) {
+                        audio.playSound("coin_bounce");
+                        coinenv.coinVelocityY = (-coinenv.bouncingFactor) * coinenv.coinVelocityY;
+                        y = coinenv.bounceY;
+                        coinenv.bounced = true;
+                    } else {
+                        audio.stopSound("coin_fly");
+                        audio.playSound("coin_drop");
+                        y = coinenv.bounceY;
+                        coinenv.setXY(coinenv.coin, x, y);
+                        setTimeout(coinenv.missed, 1000);
+                        return;
+                    }
+                }
+
+                coinenv.setXY(coinenv.coin, x, y);
+
+                setTimeout(coinenv.moveTheCoin, coinenv.timerInterval);
+            },
+
+            reset : function() {
+                coinenv.bounced = false;
+                coinenv.setXY(coinenv.coin, 200, 50);
+                coinenv.coin.style.visibility = 'visible';
+                coinenv.coinVelocityX = 0;
+                coinenv.coinVelocityY = 0;
+            },
+
+            mouseMoveHandler : function(e) {
+                if (!(coinenv.coinMoving)) {
+                    if (e.clientX >= 220) {
+                        xpos = e.clientX - 30;
+                    } else {
+                        xpos = 190;
+                    }
+                    if (e.clientY >= 80) {
+                        ypos = e.clientY - 30;
+                    } else {
+                        ypos = 50;
+                    }
+                    coinenv.setXY(coinenv.imgxvel, xpos, 50);
+                    coinenv.setXY(coinenv.imgyvel, 200, ypos);
+                }
+            },
+
+            mouseDownHandler : function(e) {
+                if (!(coinenv.coinMoving)) {
+                    var factor = 0.1;
+
+                    coinenv.coinVelocityX = (e.clientX - 170) * factor;
+                    coinenv.coinVelocityY = (e.clientY - 50) * factor;
+                    audio.playSound("coin_fly");
+                    coinenv.moveTheCoin();
+                }
+            },
+
+            missed: function() {
+                coinenv.deactivateMouseHandlers();
+                document.getElementById('missed').style.visibility = 'visible';
+                setTimeout(function() {
+                    coinenv.reset();
+                    coinenv.coinMoving = false;
+                    document.getElementById('missed').style.visibility = 'hidden';
+                    coinenv.activateMouseHandlers();
+                }, coinenv.missedDisplayTime);
+            },
+
+            end: function() {
+                gameenv.closeIframe();
+                gameenv.coinEndCallback();
+            },
+        };
+        //-->
+        </script>
+    </head>
+
+    <body onload="coinenv.initialize()">
+        <div style="position:absolute; left:0px; top:0px; width:1000px; height:500px; margin:0; padding:0; background:white;">
+            <img id="background" src="../images/coingame_bg.png" style="position: absolute; left: 200px; top: 50px;" />
+            <img id="glass" src="../images/coingame_glass.png" style="position: absolute; left: 600; top: 200px;" />
+            <img id="coin" src="../images/coingame_coin.png" style="position: absolute; left: 200px; top: 50px;" />
+            <img id="imgxvel" src="../images/coingame_xvelocity.png" width="110" style="position: absolute; left: 300px; top: 50px;" />
+            <img id="imgyvel" src="../images/coingame_yvelocity.png" width="70" style="position: absolute; left: 200px; top: 150px;" />
+            <div id="missed" style="position:absolute; left:0px; top:0px; width:1000px; height:500px; text-align:center; margin:0; padding:0; background:white; visibility:hidden;">
+                <img src="../images/coingame_greg_misses.png" />
+            </div>
+        </div>
+    </body>
+</html>

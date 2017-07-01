@@ -1,6 +1,7 @@
 var bg_folder = 'images/';
 var fg_folder = 'images/';
 var dialog_html = 'code/dialog.html';
+var coingame_html = 'code/coingame.html';
 
 var gameenv;
 
@@ -34,19 +35,19 @@ ImageCollection.prototype.loaded = function() {
 function bodyLoaded() {
     initGameEnv();
     initAudio();
-    audio.playMusic("music01");
     gameenv.start();
 }
 
 function initGameEnv() {
     gameenv = {
-        walkingTimerInterval: 240,
+        walkingTimerInterval: 150,
         default_transition_width: 100,
-        default_entrance_pos: 80,
+        default_entrance_pos: 110,
         default_player_y: 160,
 
-        fade_time: 1000, // ms
+        fade_time: 1000,  // ms
         dark_time: 300,  // ms, between region transitions (doors)
+        fade_steps: 20,  // resolution of the fade
 
         imgcollection: new ImageCollection([
             'alberto0.png',
@@ -98,12 +99,12 @@ function initGameEnv() {
         playerDirection: "right",  // left or right
         playerPose: 0,
         playerPoses: [1, 3, 2, 3],
-        //playerMovementsForPoses: [10, 20, 10, 20],
-        //distanceTolerance: 20,
         playerMovementsForPoses: [20, 34, 20, 34],
         distanceTolerance: 30,
 
         iframe: document.getElementById("popup_frame"),
+        iframeCallback: function() {},
+        coinEndCallback: null,
         current_dialog_id: '',
 
         destinationX: -1,
@@ -129,6 +130,16 @@ function initGameEnv() {
             gameenv.movePlayer(initial_x, "");
             gameenv.changeBackToOriginalPose();
             gameenv.clearStatusMessage();
+            music = content.screens[region][screen].music;
+            if (!music) music = 'music01';
+            audio.playMusic(music);
+        },
+        end: function() {
+            gameenv.background.onmousedown = null; // disable mouse handler
+            gameenv.background.onmousemove = null;
+            gameenv.background.src = bg_folder + "to_be_continued.png";
+            gameenv.player.remove();
+            audio.stopMusic();
         },
         initImgs: function() {
             gameenv.initFadeLayer();
@@ -144,12 +155,11 @@ function initGameEnv() {
             gameenv.player.ondragstart = function() { return false; };
         },
         mouseHandler: function(event) {
-            var x = event.clientX - document.getElementById("container").offsetLeft;
+            var x = event.clientX - gameenv.background.getBoundingClientRect().left;
             gameenv.setStatusMessage(gameenv.getAction(x)[0]);
         },
         mouseClickHandler: function(event) {
-            window.lastmousedownevent = event; // debug
-            var x = event.clientX - document.getElementById("container").offsetLeft;
+            var x = event.clientX - gameenv.background.getBoundingClientRect().left;
             gameenv.scheduledAction = gameenv.getAction(x)[1];
             var is_walking = gameenv.destinationX > -1;
             gameenv.destinationX = x;
@@ -162,21 +172,9 @@ function initGameEnv() {
             for (var d in content.screens[gameenv.region][gameenv.screen].interactions) {
                 var area = content.screens[gameenv.region][gameenv.screen].interactions[d];
                 if (x >= area.from && x <= area.to) {
-                    return ["Talk / Use", area.action];
-                }
-            }
-            // check if clicked on door
-            for (var d in content.screens[gameenv.region][gameenv.screen].doors) {
-                var door = content.screens[gameenv.region][gameenv.screen].doors[d];
-                if (x >= door.from && x <= door.to) {
-                    return ["Enter", function() {
-                        gameenv.fadeOut();
-                        gameenv.clearStatusMessage();
-                        setTimeout(function() {
-                            gameenv.gotoScreen(door.region, door.screen, door.pos);
-                            gameenv.fadeIn();
-                        }, gameenv.fade_time + gameenv.dark_time);
-                    }];
+                    if (area.condition == undefined || area.condition()) {
+                        return [area.text, area.action];
+                    }
                 }
             }
             // check if clicked on screen edge to do a transition
@@ -244,16 +242,18 @@ function initGameEnv() {
             }
             gameenv.timerid = setTimeout(gameenv.walkingTimer, gameenv.walkingTimerInterval);
         },
-        openIframe: function(url) {
-            audio.playSound("dialog");
+        openIframe: function(url, left, top, width, height) {
             gameenv.background.onmousedown = null; // disable mouse handler
             gameenv.background.onmousemove = null;
             gameenv.clearStatusMessage();
+            gameenv.iframeCallback = function() {
+                audio.playSound("dialog");
+                gameenv.iframe.style.left = left + "px";
+                gameenv.iframe.style.top = top + "px";
+                gameenv.iframe.style.width = width + "px";
+                gameenv.iframe.style.height = height + "px";
+            };
             gameenv.iframe.src = url;
-            gameenv.iframe.style.left = "150px";
-            gameenv.iframe.style.top = "75px";
-            gameenv.iframe.style.width = "700px";
-            gameenv.iframe.style.height = "350px";
         },
         closeIframe: function() {
             gameenv.iframe.src = "about:blank";
@@ -266,31 +266,33 @@ function initGameEnv() {
         },
         openDialog: function(dialog_id) {
             gameenv.current_dialog_id = dialog_id;
-            gameenv.openIframe(dialog_html);
+            gameenv.openIframe(dialog_html, 150, 75, 700, 350);
         },
         fadeIn: function() {
             window.clearInterval(gameenv.fade_timer_id);
-            gameenv.fade_timer_id = window.setInterval("gameenv.fadeInStep()", gameenv.fade_time / 100);
+            gameenv.fade_timer_id = window.setInterval("gameenv.fadeInStep()", gameenv.fade_time / gameenv.fade_steps);
         },
         fadeOut: function() {
             gameenv.initFadeLayer();
             window.clearInterval(gameenv.fade_timer_id);
-            gameenv.fade_timer_id = window.setInterval("gameenv.fadeOutStep()", gameenv.fade_time / 100);
+            gameenv.fade_timer_id = window.setInterval("gameenv.fadeOutStep()", gameenv.fade_time / gameenv.fade_steps);
         },
         fadeInStep: function() {
             if (gameenv.fade_opacity > 0) {
-                gameenv.fade_opacity -= 1;
+                gameenv.fade_opacity -= 100 / gameenv.fade_steps;
                 gameenv.setFadeOpacity();
             } else {
+                gameenv.fade_opacity = 0;
                 window.clearInterval(gameenv.fade_timer_id);
                 gameenv.removeFadeLayer();
             }
         },
         fadeOutStep: function() {
             if (gameenv.fade_opacity < 100) {
-                gameenv.fade_opacity += 1;
+                gameenv.fade_opacity += 100 / gameenv.fade_steps;
                 gameenv.setFadeOpacity();
             } else {
+                gameenv.fade_opacity = 100;
                 window.clearInterval(gameenv.fade_timer_id);
             }
         },
@@ -316,12 +318,44 @@ function initGameEnv() {
             gameenv.fade_layer.style.KHTMLOpacity = opacity/100; // Safari<1.2, Konqueror
             gameenv.fade_layer.style.MozOpacity = opacity/100; // Older Mozilla and Firefox
             gameenv.fade_layer.style.opacity = opacity/100; // Safari 1.2, newer Firefox and Mozilla, CSS3
-	},
-	setStatusMessage: function(msg) {
-	    document.getElementById("status_bar").innerHTML = msg;
-	},
-	clearStatusMessage: function(msg) {
-	    gameenv.setStatusMessage("&nbsp;");
-	}
+        },
+        setStatusMessage: function(msg) {
+            document.getElementById("status_bar").innerHTML = msg;
+        },
+        clearStatusMessage: function(msg) {
+            gameenv.setStatusMessage("&nbsp;");
+        }
     };
+}
+
+function transition(region, screen, pos) {
+    gameenv.fadeOut();
+    gameenv.clearStatusMessage();
+    setTimeout(function() {gameenv.gotoScreen(region, screen, pos);}, gameenv.fade_time);
+    setTimeout(gameenv.fadeIn, gameenv.fade_time + gameenv.dark_time);
+}
+
+function dialog(id) {
+    gameenv.openDialog(id);
+}
+
+function coingame(function_after) {
+    gameenv.coinEndCallback = function_after;
+    gameenv.openIframe(coingame_html, 0, 0, 1000, 500);
+}
+
+function set_var(name, value) {
+    gameenv.data[name] = value;
+}
+
+function check_var(name, value) {
+    return gameenv.data[name] == value;
+}
+
+function end() {
+    gameenv.fadeOut();
+    gameenv.clearStatusMessage();
+    audio.stopMusic();
+    setTimeout(function() {gameenv.end();}, gameenv.fade_time);
+    setTimeout(function() {gameenv.fadeIn(); audio.playMusic('music03');}, gameenv.fade_time + gameenv.dark_time);
 }

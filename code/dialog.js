@@ -18,6 +18,7 @@ function bodyLoaded()
 	} else {
 		display_message('ren', "Sometimes I wonder if I should have become like Tuner...", false);
 	}
+	gameenv.iframeCallback();
 }
 
 function start_dialog(id) {
@@ -28,6 +29,9 @@ function start_dialog(id) {
 			display_choice(d[id].image, d[id].choice);
 		} else {
 			display_message(d[id].image, d[id].text, d[id].next);
+		}
+		if (d[id].action) {
+			d[id].action();
 		}
 	} else {
 		display_message("", 'Dialog "' + id + '" not found.', false);
@@ -42,8 +46,10 @@ function display_message(face, text, next) {
 	var next_func;
 	if (next == -1) {  // keep open forever to wait for user input
 		return;
-	} else if (next) { // continue with next dialog
+	} else if (typeof next === 'string') { // continue with next dialog
 		next_func = function() { start_dialog(next); };
+	} else if (typeof next === 'function') { // close dialog and do something else
+		next_func = function() { close(); next(); };
 	} else { // nothing to continue, close window
 		next_func = close;
 	}
@@ -60,7 +66,9 @@ function display_choice(face, choices) {
 	current_choices = choices;
 	var text = "<ul>";
 	for (var c=0; c<choices.length; c++) {
-		text = text + '<li><p class="choice"><a href="javascript:choice('+c+')">' + choices[c].text + '</a></p></li>';
+		if (choices[c].condition == undefined || choices[c].condition()) {
+			text = text + '<li><p class="choice"><a href="javascript:choice('+c+')">' + choices[c].text + '</a></p></li>';
+		}
 	}
     text = text + "</ul>";
 	display_message(face, text, -1);
