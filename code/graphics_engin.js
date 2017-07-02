@@ -253,10 +253,10 @@ function initGameEnv() {
                 gameenv.iframe.style.width = width + "px";
                 gameenv.iframe.style.height = height + "px";
             };
-            gameenv.iframe.src = url;
+            gameenv.iframe.contentWindow.location.replace(url);
         },
         closeIframe: function() {
-            gameenv.iframe.src = "about:blank";
+            gameenv.iframe.contentWindow.location.replace("about:blank");
             gameenv.iframe.style.left = "0px";
             gameenv.iframe.style.top = "0px";
             gameenv.iframe.style.width = "0px";
