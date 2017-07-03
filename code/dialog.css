@@ -28,7 +28,6 @@ div#textbox {
 	margin-bottom: 10px;
 	background-color: #fff;
 	border: 2px black solid;
-	-moz-border-radius: 15px;
 	border-radius: 15px;
 	font-family: 'ArchitectsDaughter', sans-serif;
 	text-transform: uppercase;
