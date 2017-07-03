@@ -102,7 +102,8 @@ function initGameEnv() {
         playerMovementsForPoses: [20, 34, 20, 34],
         distanceTolerance: 30,
 
-        iframe: document.getElementById("popup_frame"),
+        iframe: null,
+        container: document.getElementById("container"),
         iframeCallback: function() {},
         coinEndCallback: null,
         current_dialog_id: '',
@@ -119,9 +120,24 @@ function initGameEnv() {
                 setTimeout(gameenv.start, 500);
             } else {
                 gameenv.initImgs();
+                var newFrame = gameenv.getIframe();
+                newFrame.src = "about:blank";
+                gameenv.container.appendChild(newFrame);
+                gameenv.iframe = newFrame;
                 gameenv.gotoScreen(initial_region, initial_screen, initial_pos);
                 gameenv.fadeIn();
             }
+        },
+        getIframe: function() {
+            var newFrame = document.createElement("iframe");
+            newFrame.id = "popup_frame";
+            newFrame.setAttribute("frameborder", "0");
+            newFrame.setAttribute("scrolling", "no");
+            newFrame.style.left = "0px";
+            newFrame.style.top = "0px";
+            newFrame.style.width = "0px";
+            newFrame.style.height = "0px";
+            return newFrame;
         },
         gotoScreen: function(region, screen, initial_x) {
             gameenv.region = region;
@@ -253,10 +269,12 @@ function initGameEnv() {
                 gameenv.iframe.style.width = width + "px";
                 gameenv.iframe.style.height = height + "px";
             };
-            gameenv.iframe.contentWindow.location.replace(url);
+            var newFrame = gameenv.getIframe();
+            newFrame.src = url;
+            gameenv.container.replaceChild(newFrame, gameenv.iframe);
+            gameenv.iframe = newFrame;
         },
         closeIframe: function() {
-            gameenv.iframe.contentWindow.location.replace("about:blank");
             gameenv.iframe.style.left = "0px";
             gameenv.iframe.style.top = "0px";
             gameenv.iframe.style.width = "0px";
