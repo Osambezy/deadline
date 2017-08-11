@@ -5,17 +5,15 @@ var audio;
 
 function MusicSound(name) {
 	this.sound = new Howl({
-		urls: [music_folder + name + ".mp3", music_folder + name + ".ogg"],
-		buffer: true,
+		src: [music_folder + name + ".mp3", music_folder + name + ".ogg"],
 		loop: name=='music03' ? false : true
 	});
 }
 
 function EffectSound(name) {
 	this.sound = new Howl({
-		urls: [sound_folder + name + ".mp3", sound_folder + name + ".wav"],
-		volume: 0.3,
-		buffer: false
+		src: [sound_folder + name + ".mp3", sound_folder + name + ".wav"],
+		volume: 0.3
 	});
 }
 
